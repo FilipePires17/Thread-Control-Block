@@ -13,8 +13,6 @@ typedef struct {
 	int tid;
 } lock_t;
 
-extern 
-
 void lock_init(lock_t *);
 void lock_acquire(lock_t *);
 void lock_release(lock_t *);

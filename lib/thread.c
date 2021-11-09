@@ -32,18 +32,19 @@ void *my_malloc(int size)
  */
 int thread_init()
 {
-	node_t 	*main_node;
+	//node_t 	*main_node;
 	tcb_t 	*main_tcb;
 
-	main_node = (node_t*) my_malloc(sizeof(node_t));
+	//main_node = (node_t*) my_malloc(sizeof(node_t));
 	main_tcb = (tcb_t*) my_malloc(sizeof(tcb_t));
 	main_tcb->sp = main_tcb->stack + (STACK_SIZE/8) - 1;
 	main_tcb->status = 1;
+	//main_tcb->tcb_list = ready_queue;
 	queue_init(&ready_queue);
-	
+	enqueue((node_t*)&ready_queue, &(main_tcb->tcb_list));
 	current_running = main_tcb;
-	main_node->item = current_running;
-	current_node = main_node;
+	//main_node->item = current_running;
+	//current_node = main_node;
 
 	thread_t *main_thread;
 	main_thread = my_malloc(sizeof(thread_t));
@@ -57,7 +58,7 @@ int thread_init()
 int thread_create(thread_t *thread, void *(*start_routine)(void *), void *arg)
 {
 	tcb_t  *tcb;
-	node_t *node;
+	//node_t *node;
 
 	tcb = (tcb_t*) my_malloc(sizeof(tcb_t));
 	tcb->status = 1;
@@ -71,13 +72,14 @@ int thread_create(thread_t *thread, void *(*start_routine)(void *), void *arg)
 		tcb->regs[i] = 0;
 	}
 	*(tcb->sp) = (u_int64_t) start_routine;
+	tcb->tcb_list =
 
 	thread->tcb = tcb;
 	int my_tid = gettid();
 	thread->my_tid = my_tid;
 
-	node = (node_t*) my_malloc(sizeof(node_t));
-	node->item = thread->tcb;
+	//node = (node_t*) my_malloc(sizeof(node_t));
+	//node->item = thread->tcb;
 
 	enqueue(&ready_queue, node);
 

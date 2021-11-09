@@ -7,7 +7,7 @@ typedef enum {
 
 typedef struct thr {
 	void 	*tcb;
-    int     my_tid;
+    int     *my_tid;
 } thread_t;
 
 void *my_malloc(int);
