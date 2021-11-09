@@ -1,13 +1,14 @@
 #include <lock.h>
 #include <threadu.h>
-#include <thread.h>
 #include <queue.h>
+#include <thread.h>
 #include <string.h>
+//#include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>
+//#include <stdint.h>
 
-node_t lock_queue;
+//node_t lock_queue;
 
 enum {
       SPIN = TRUE,
@@ -20,9 +21,7 @@ void lock_init(lock_t * l)
 		l->status = UNLOCKED;
 	} else {
 		l->status = UNLOCKED;
-		l->tid = 0;
-		queue_init(&lock_queue);
-		(&lock_queue)->item = l;
+		queue_init(&(l->lock_queue));
 	}
 }
 
@@ -59,13 +58,11 @@ void lock_release(lock_t * l)
 // TODO: blocks the running thread
 void block()
 {
-	lock_t *tmp_lock;
-	tmp_lock = my_malloc(sizeof(lock_t));
-	tmp_lock = (lock_t*) (&lock_queue)->item;
-	if (tmp_lock->status == LOCKED) {
-		node_t new_lock;
-		tmp_lock = (&new_lock)->item;
-	}
+	node_t node;
+	//(&node)->item = thread;
+	enqueue(&lock_queue, &node);
+	//((tcb_t*) thread->tcb)->status = BLOCKED;
+	return;
 }
 
 // TODO: unblocks  a thread that is waiting on a lock.

@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 #include <threadu.h>
-#include <queue.h>
 
 #define NUMBER_OF_REGISTERS	15
 #define STACK_SIZE		2048
@@ -24,9 +23,6 @@ typedef struct tcb {
 	uint64_t regs[NUMBER_OF_REGISTERS];
 	uint64_t *sp;
 	uint64_t stack[256];
-	node_t   tcb_list;
 } tcb_t;
-
-
 
 #endif /* THREAD_H */

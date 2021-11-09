@@ -6,7 +6,7 @@
 
 typedef struct node {
    struct node *next, *prev;
-   //void *item;
+   void *item;
 } node_t;
 
 /* Initialize a queue */
