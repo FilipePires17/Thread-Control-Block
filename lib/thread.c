@@ -1,10 +1,8 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
 #include <string.h>
 
-#include <queue.h>
 #include <thread.h>
 
 node_t	ready_queue;
@@ -37,7 +35,7 @@ int thread_init()
 	main_node = (node_t*) my_malloc(sizeof(node_t));
 	main_tcb = (tcb_t*) my_malloc(sizeof(tcb_t));
 	main_tcb->sp = main_tcb->stack + (STACK_SIZE/8) - 1;
-	main_tcb->status = 1;
+	main_tcb->status = READY;
 	queue_init(&ready_queue);
 	
 	current_running = main_tcb;
@@ -53,7 +51,7 @@ int thread_create(thread_t *thread, void *(*start_routine)(void *), void *arg)
 	node_t *node;
 
 	tcb = (tcb_t*) my_malloc(sizeof(tcb_t));
-	tcb->status = 1;
+	tcb->status = READY;
 	tcb->sp = tcb->stack + (STACK_SIZE/8) - 1;
 	tcb->flags = 0;
 	for (int i = 0; i<NUMBER_OF_REGISTERS; i++) {
@@ -86,7 +84,7 @@ int thread_yield()
 int thread_join(thread_t *thread, int *retval) 
 {
 
-	while (((tcb_t*) thread->tcb)->status != 3) {
+	while (((tcb_t*) thread->tcb)->status != EXITED) {
 		thread_yield();
 	}
 
@@ -98,7 +96,7 @@ int thread_join(thread_t *thread, int *retval)
 // TODO: marks a thread as EXITED and terminates the thread
 void thread_exit(int status)
 {
-	current_running->status = 3;
+	current_running->status = EXITED;
 
 	thread_yield();
 	return;
@@ -107,7 +105,6 @@ void thread_exit(int status)
 // TODO: selects the next thread to execute
 void scheduler()
 {
-	//printf("%d\n", current_running->status);
 	if (current_running->status == READY)
 		enqueue(&ready_queue, current_node);
 	

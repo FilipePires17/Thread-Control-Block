@@ -1,7 +1,7 @@
 #ifndef LOCK_H
 #define LOCK_H
 
-#include <queue.h>
+#include <thread.h>
 
 typedef struct {
 	enum {
@@ -9,7 +9,7 @@ typedef struct {
 	      LOCKED,
 	} status;
 	// TODO: define a queue for the lock.
-	node_t lock_queue; 
+	//node_t lock_queue; 
 } lock_t;
 
 void lock_init(lock_t *);

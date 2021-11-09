@@ -1,17 +1,13 @@
 #include <lock.h>
-#include <threadu.h>
-#include <queue.h>
 #include <thread.h>
 #include <string.h>
-//#include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>
-//#include <stdint.h>
 
-//node_t lock_queue;
+node_t lock_queue;
 
 enum {
-      SPIN = TRUE,
+      SPIN = FALSE,
 };
 
 // TODO: inicializes a lock
@@ -21,7 +17,7 @@ void lock_init(lock_t * l)
 		l->status = UNLOCKED;
 	} else {
 		l->status = UNLOCKED;
-		queue_init(&(l->lock_queue));
+		queue_init(&lock_queue);
 	}
 }
 
@@ -58,10 +54,11 @@ void lock_release(lock_t * l)
 // TODO: blocks the running thread
 void block()
 {
-	node_t node;
-	//(&node)->item = thread;
-	enqueue(&lock_queue, &node);
-	//((tcb_t*) thread->tcb)->status = BLOCKED;
+	node_t *tmp_node;
+	tmp_node = my_malloc(sizeof(node_t));
+	current_running->status = BLOCKED;
+	tmp_node->item = current_running;
+	enqueue(&lock_queue, tmp_node);
 	return;
 }
 
@@ -70,10 +67,10 @@ void unblock(lock_t *l)
 {
 	if (!is_empty(&lock_queue)) {
 		node_t   *tmp_node;
-		//thread_t *tmp_thread;
 		tmp_node = my_malloc(sizeof(node_t));
 		tmp_node = dequeue(&lock_queue);
-		((tcb_t*)((thread_t*) tmp_node->item)->tcb)->status = READY;
+		((tcb_t*)(tmp_node->item))->status = READY;
+		enqueue(&ready_queue, tmp_node);
 	}
 	else {
 		l->status = UNLOCKED;
