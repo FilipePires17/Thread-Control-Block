@@ -117,17 +117,17 @@ static void print_counter(int thread, int status)
 	int line = 19 + thread;
 
 	if (thread == 2) {
-		print_str(21, 0, "Thread  2 (lock)      : ");
+		print_str(line, 0, "Thread  2 (lock)      : ");
 	} else {
-		print_str(22, 0, "Thread  3 (lock)      : ");
+		print_str(line, 0, "Thread  3 (lock)      : ");
 	}
-	usleep(20000);
+	sleep(1);
 	switch (status) {
 	case RUNNING:
 		if (thread == 2) {
-			print_int(21, 25, counter2++);
+			print_int(line, 25, counter2++);
 		} else {
-			print_int(22, 25, counter3++);
+			print_int(line, 25, counter3++);
 		}
 		break;
 	case DONE:

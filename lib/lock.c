@@ -67,7 +67,7 @@ void unblock(lock_t *l)
 {
 	if (!is_empty(&lock_queue)) {
 		node_t   *tmp_node;
-		tmp_node = my_malloc(sizeof(node_t));
+		//tmp_node = my_malloc(sizeof(node_t));
 		tmp_node = dequeue(&lock_queue);
 		((tcb_t*)(tmp_node->item))->status = READY;
 		enqueue(&ready_queue, tmp_node);
