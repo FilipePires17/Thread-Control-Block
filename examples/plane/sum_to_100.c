@@ -14,7 +14,7 @@ void sum_to_100(void *p)
 	int sleep_time = *(int *)p;
 
 	clear();
-	sleep_time *= 1000;
+	//sleep_time *= 1000;
 	for (i = 0; i <= 100; i++) {
 		print_str(15, 0, "Did you know that 1 + ... + ");
 		sum = rec(i);
@@ -22,7 +22,7 @@ void sum_to_100(void *p)
 		printf("%d = %d \n", i, sum);
 		fflush(stdout);
 		print_counter(FALSE);
-		usleep(sleep_time);
+		sleep(sleep_time);
 		thread_yield();
 	}
 	print_counter(TRUE);

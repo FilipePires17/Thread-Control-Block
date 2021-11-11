@@ -27,7 +27,7 @@ void *plane(void *p)
 	int sleep_time = *(int *)p;
 	
 	clear();
-	sleep_time *= 1000;
+	//sleep_time *= 1000;
 	while (1) {
 		print_counter();
 		/* erase plane */
@@ -39,7 +39,7 @@ void *plane(void *p)
 		/* draw plane */
 		draw(locx, locy, TRUE);
 		print_counter();
-		usleep(sleep_time);
+		sleep(sleep_time);
 		thread_yield();
 	}
 }
