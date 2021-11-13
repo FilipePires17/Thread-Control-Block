@@ -121,7 +121,7 @@ static void print_counter(int thread, int status)
 	} else {
 		print_str(line, 0, "Thread  3 (lock)      : ");
 	}
-	sleep(1);
+	usleep(20000);
 	switch (status) {
 	case RUNNING:
 		if (thread == 2) {

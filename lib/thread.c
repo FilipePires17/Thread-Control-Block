@@ -52,15 +52,12 @@ int thread_create(thread_t *thread, void *(*start_routine)(void *), void *arg)
 
 	tcb = (tcb_t*) my_malloc(sizeof(tcb_t));
 	tcb->status = READY;
-	tcb->sp = tcb->stack + (STACK_SIZE/8) - 1;
-	tcb->flags = 0;
+	tcb->sp = &(tcb->stack[255]);
+	tcb->flags = (u_int64_t) 0;
 	for (int i = 0; i<NUMBER_OF_REGISTERS; i++) {
-		if (i == 9) {
-			tcb->regs[i] = (u_int64_t) arg;
-			continue;
-		}
-		tcb->regs[i] = 0;
+		tcb->regs[i] = (u_int64_t) 0;
 	}
+	tcb->regs[9] = (u_int64_t) arg;
 	*(tcb->sp) = (u_int64_t) start_routine;
 
 	thread->tcb = tcb;
@@ -89,7 +86,7 @@ int thread_join(thread_t *thread, int *retval)
 	}
 
 	*retval = (int) ((tcb_t*) thread->tcb)->regs[14];
-	free(thread->tcb);
+	//free(thread->tcb);
 	return 0;
 }
 
@@ -97,6 +94,7 @@ int thread_join(thread_t *thread, int *retval)
 void thread_exit(int status)
 {
 	current_running->status = EXITED;
+	current_running->regs[14] = status;
 
 	thread_yield();
 	return;

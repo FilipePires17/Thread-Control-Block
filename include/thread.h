@@ -10,6 +10,7 @@
 
 void scheduler_entry();
 void exit_handler();
+void *my_malloc(int);
 
 typedef enum {
 	      FIRST_TIME,
